@@ -6,53 +6,33 @@
  * }
  */
 class Solution {
-    public void findSecretWord(String[] wordlist, Master master) {
-        List<String> candidates = new ArrayList<>(Arrays.asList(wordlist));
-        for (int attempt = 0; attempt < wordlist.length && !candidates.isEmpty(); attempt++) {
-            String guess = findBestGuess(candidates);
-            int matches = master.guess(guess);
-            if (matches == 6) {
-                return;
-            }
-            List<String> newCandidates = new ArrayList<>();
-            for (String word : candidates) {
-                if (countMatches(guess, word) == matches) {
-                    newCandidates.add(word);
+    public void findSecretWord(String[] words, Master master) {
+        int guess = 0;
+        int last = words.length - 1;
+        while (guess != 6) {
+            guess = master.guess(words[0]);
+            int index = 1;
+            while (index <= last) {
+                int count = matches(words[0], words[index]);
+                if (count == guess) {
+                    index++;
+                } else {
+                    words[index] = words[last];
+                    last--;
                 }
             }
-            candidates = newCandidates;
+            words[0] = words[last];
+            last--;
         }
     }
-    private String findBestGuess(List<String> candidates) {
-        if (candidates.size() <= 2) {
-            return candidates.get(0);
-        }
-        String bestWord = null;
-        int minMaxCount = Integer.MAX_VALUE;
-        for (String word : candidates) {
-            Map<Integer, Integer> countMap = new HashMap<>();
-            for (String candidate : candidates) {
-                int matches = countMatches(word, candidate);
-                countMap.put(matches, countMap.getOrDefault(matches, 0) + 1);
-            }
-            int maxCount = 0;
-            for (int count : countMap.values()) {
-                maxCount = Math.max(maxCount, count);
-            }
-            if (maxCount < minMaxCount) {
-                minMaxCount = maxCount;
-                bestWord = word;
-            }
-        }
-        return bestWord;
-    }
-    private int countMatches(String word1, String word2) {
-        int matches = 0;
-        for (int i = 0; i < word1.length(); i++) {
+
+    private int matches(String word1, String word2) {
+        int count = 0;
+        for (int i = 0; i < 6; i++) {
             if (word1.charAt(i) == word2.charAt(i)) {
-                matches++;
+                count++;
             }
         }
-        return matches;
+        return count;
     }
 }
