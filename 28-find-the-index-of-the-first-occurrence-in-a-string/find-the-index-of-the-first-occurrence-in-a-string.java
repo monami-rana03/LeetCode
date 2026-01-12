@@ -1,0 +1,25 @@
+class Solution {
+    public int strStr(String haystack, String needle) {
+
+        int n = haystack.length();
+        int m = needle.length();
+
+        // Loop through possible starting positions
+        for (int i = 0; i <= n - m; i++) {
+
+            int j = 0;
+
+            // Compare characters of needle
+            while (j < m && haystack.charAt(i + j) == needle.charAt(j)) {
+                j++;
+            }
+
+            // If all characters matched
+            if (j == m) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
