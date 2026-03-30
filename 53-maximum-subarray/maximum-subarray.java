@@ -6,7 +6,12 @@ class Solution {
 
         for (int i = 1; i < nums.length; i++) {
 
-            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            if (currentSum < 0) {
+                currentSum = nums[i];
+            } else {
+                currentSum += nums[i];
+            }
+
             maxSum = Math.max(maxSum, currentSum);
         }
 
